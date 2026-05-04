@@ -1,0 +1,28 @@
+# Per-template node_modules and build artifacts
+templates/*/node_modules/
+templates/*/.next/
+templates/*/out/
+templates/*/build/
+templates/*/*.tsbuildinfo
+templates/*/next-env.d.ts
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env files (no template should have one, but just in case)
+templates/*/.env
+templates/*/.env.local
+templates/*/.env.*.local

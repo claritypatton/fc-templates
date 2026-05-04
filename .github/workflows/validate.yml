@@ -1,0 +1,124 @@
+name: Validate templates
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  list-templates:
+    name: Discover templates
+    runs-on: ubuntu-latest
+    outputs:
+      templates: ${{ steps.find.outputs.templates }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: find
+        name: Read templates.json
+        run: |
+          TEMPLATES=$(jq -c '[.templates[].id]' templates.json)
+          echo "templates=$TEMPLATES" >> $GITHUB_OUTPUT
+          echo "Found templates: $TEMPLATES"
+
+  build:
+    name: Build ${{ matrix.template }}
+    needs: list-templates
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        template: ${{ fromJSON(needs.list-templates.outputs.templates) }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: templates/${{ matrix.template }}/package-lock.json
+
+      - name: Install dependencies
+        working-directory: templates/${{ matrix.template }}
+        run: npm install --no-audit --no-fund
+
+      - name: Verify template.json exists and is valid
+        working-directory: templates/${{ matrix.template }}
+        run: |
+          test -f template.json
+          jq empty template.json
+          echo "✓ template.json is valid"
+
+      - name: Type check
+        working-directory: templates/${{ matrix.template }}
+        run: npx tsc --noEmit
+
+      - name: Build
+        working-directory: templates/${{ matrix.template }}
+        run: npm run build
+
+      - name: Verify build output
+        working-directory: templates/${{ matrix.template }}
+        run: |
+          test -d .next
+          echo "✓ .next directory exists after build"
+
+  registry-integrity:
+    name: Registry integrity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: templates.json is valid JSON
+        run: jq empty templates.json
+
+      - name: Every active template in registry has a directory
+        run: |
+          ACTIVE_IDS=$(jq -r '.templates[] | select(.active == true) | .id' templates.json)
+          MISSING=0
+          for id in $ACTIVE_IDS; do
+            if [ ! -d "templates/$id" ]; then
+              echo "✗ templates.json lists active template '$id' but templates/$id/ does not exist"
+              MISSING=1
+            fi
+          done
+          if [ $MISSING -eq 0 ]; then
+            echo "✓ All active templates have directories"
+          else
+            exit 1
+          fi
+
+      - name: Every template directory has matching registry entry
+        run: |
+          MISSING=0
+          for dir in templates/*/; do
+            id=$(basename "$dir")
+            if ! jq -e --arg id "$id" '.templates[] | select(.id == $id)' templates.json > /dev/null; then
+              echo "✗ Directory templates/$id/ exists but is not in templates.json"
+              MISSING=1
+            fi
+          done
+          if [ $MISSING -eq 0 ]; then
+            echo "✓ All template directories have registry entries"
+          else
+            exit 1
+          fi
+
+      - name: Every active template has a preview image
+        run: |
+          ACTIVE_IDS=$(jq -r '.templates[] | select(.active == true) | .id' templates.json)
+          MISSING=0
+          for id in $ACTIVE_IDS; do
+            if [ ! -f "previews/$id.png" ]; then
+              echo "✗ Active template '$id' is missing previews/$id.png"
+              MISSING=1
+            fi
+          done
+          if [ $MISSING -eq 0 ]; then
+            echo "✓ All active templates have preview images"
+          else
+            exit 1
+          fi

@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Brand-token bridge
+ * Tailwind tokens are defined in tailwind.config.ts. CSS variables here
+ * are used for things Tailwind can't easily express (font-family variables
+ * consumed by next/font, gradient overlays, decorative grids).
+ * ─────────────────────────────────────────────────────────────────────── */
+:root {
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+
+  /* Hero overlay — softens placeholder image and improves text contrast */
+  --hero-overlay: linear-gradient(
+    115deg,
+    rgba(11, 18, 32, 0.85) 0%,
+    rgba(11, 18, 32, 0.55) 55%,
+    rgba(11, 18, 32, 0.35) 100%
+  );
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: theme('colors.bg');
+  color: theme('colors.ink');
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: theme('colors.accent.DEFAULT');
+  color: white;
+}
+
+*:focus-visible {
+  outline: 2px solid theme('colors.accent.DEFAULT');
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── Placeholder image gradients ───
+ * Industrial palette: cool navy + steel + a hit of safety orange.
+ * Same component-level convention as Atrium — empty src renders this block.
+ */
+.placeholder-image {
+  background:
+    linear-gradient(135deg,
+      theme('colors.primary.DEFAULT') 0%,
+      theme('colors.primary.light') 60%,
+      theme('colors.accent.DEFAULT') 140%
+    );
+  position: relative;
+  overflow: hidden;
+}
+
+.placeholder-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.10) 0%, transparent 45%),
+    radial-gradient(circle at 15% 90%, rgba(255, 90, 31, 0.20) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.placeholder-image::before {
+  content: 'Client image';
+  position: absolute;
+  bottom: 14px;
+  left: 16px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  z-index: 1;
+  font-family: var(--font-body), system-ui, sans-serif;
+  pointer-events: none;
+}
+
+.hero-overlay {
+  background-image: var(--hero-overlay);
+}
+
+/* Decorative dot grid — used on dark hero/CTA panels for industrial texture */
+.bg-dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Decorative diagonal stripes — used in narrow accents */
+.bg-diagonal-stripes {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 90, 31, 0.0) 0px,
+    rgba(255, 90, 31, 0.0) 6px,
+    rgba(255, 90, 31, 1) 6px,
+    rgba(255, 90, 31, 1) 12px
+  );
+}

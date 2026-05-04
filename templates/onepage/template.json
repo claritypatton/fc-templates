@@ -1,0 +1,14 @@
+{
+  "id": "onepage",
+  "name": "Quick Launch",
+  "shape": "single-page",
+  "pages": ["/"],
+  "navigation": "anchor",
+  "agent_files_to_edit": [
+    "lib/site-config.ts",
+    "tailwind.config.ts",
+    "app/layout.tsx",
+    "public/img/"
+  ],
+  "description": "Single-page site with anchor navigation. Generous warm aesthetic. Best for quick brand presence and lead capture."
+}

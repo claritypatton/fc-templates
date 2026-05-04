@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Brand-token bridge
+ * Tailwind tokens are defined in tailwind.config.ts. CSS variables here
+ * are used for things Tailwind can't easily express (e.g., font-family
+ * variables consumed by next/font, and gradients).
+ *
+ * The agent rewrites Tailwind config + this file together when re-skinning.
+ * ─────────────────────────────────────────────────────────────────────── */
+:root {
+  /* Font stacks consumed by Tailwind theme.fontFamily */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+  /* Hero gradient overlay — softens placeholder image */
+  --hero-overlay: linear-gradient(
+    180deg,
+    rgba(15, 76, 92, 0.10) 0%,
+    rgba(15, 76, 92, 0.55) 100%
+  );
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px; /* offset for sticky header anchor jumps */
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: theme('colors.bg');
+  color: theme('colors.ink');
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Display headlines use the serif by default — components apply font-display */
+
+/* Selection */
+::selection {
+  background-color: theme('colors.primary.DEFAULT');
+  color: theme('colors.bg');
+}
+
+/* Focus rings — accessible, brand-aligned */
+*:focus-visible {
+  outline: 2px solid theme('colors.accent.DEFAULT');
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── Placeholder image gradients ───
+ * Real images go in /public/img/. Until then, image elements with class
+ * "placeholder-image" render as branded gradient blocks with a subtle
+ * "Client photography" label. The label is intentionally low-key — it
+ * signals to the client that this slot is a placeholder for their own
+ * imagery, not that the site itself is unfinished. The agent replaces
+ * these with real images by populating /public/img/ as part of the
+ * client engagement; the gradient is always the v0 default.
+ */
+.placeholder-image {
+  background: linear-gradient(
+    135deg,
+    theme('colors.primary.DEFAULT') 0%,
+    theme('colors.primary.dark') 60%,
+    theme('colors.accent.DEFAULT') 140%
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.placeholder-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(227, 111, 77, 0.18) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.placeholder-image::before {
+  content: 'Client image';
+  position: absolute;
+  bottom: 14px;
+  left: 16px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  z-index: 1;
+  font-family: var(--font-body), system-ui, sans-serif;
+  pointer-events: none;
+}
+
+/* Subtle entrance animation, fired on initial load */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise {
+  animation: rise 0.6s ease-out both;
+}
+
+.animate-rise-delay-1 {
+  animation: rise 0.6s ease-out 0.08s both;
+}
+
+.animate-rise-delay-2 {
+  animation: rise 0.6s ease-out 0.16s both;
+}

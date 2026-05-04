@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "updatedAt": "2026-05-01T00:00:00Z",
+  "templates": [
+    {
+      "id": "onepage",
+      "name": "Quick Launch",
+      "description": "Single-page site with anchor navigation. Generous warm aesthetic. Best for quick brand presence and lead capture.",
+      "pageCount": 1,
+      "shape": "single-page",
+      "previewImage": "https://raw.githubusercontent.com/claritypatton/fc-templates/main/previews/onepage.png",
+      "active": true
+    },
+    {
+      "id": "mainline",
+      "name": "Mainline",
+      "description": "Four-page site with industrial-precise design. Best for trades, contractors, and modern small business.",
+      "pageCount": 4,
+      "shape": "multipage-brochure",
+      "previewImage": "https://raw.githubusercontent.com/claritypatton/fc-templates/main/previews/mainline.png",
+      "active": true
+    },
+    {
+      "id": "atrium",
+      "name": "Atrium",
+      "description": "Four-page site with warm editorial design. Best for professional services, healthcare, and brands that need to feel personal.",
+      "pageCount": 4,
+      "shape": "multipage-brochure",
+      "previewImage": "https://raw.githubusercontent.com/claritypatton/fc-templates/main/previews/atrium.png",
+      "active": true
+    }
+  ]
+}

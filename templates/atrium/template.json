@@ -1,0 +1,14 @@
+{
+  "id": "atrium",
+  "name": "Atrium",
+  "shape": "multipage-brochure",
+  "pages": ["/", "/services", "/about", "/contact"],
+  "navigation": "routes",
+  "agent_files_to_edit": [
+    "lib/site-config.ts",
+    "tailwind.config.ts",
+    "app/layout.tsx",
+    "public/img/"
+  ],
+  "description": "Four-page site with warm editorial design — full-bleed photo hero on home, compact text heroes on inner pages. Best for professional services, healthcare, and brands that need to feel personal."
+}
