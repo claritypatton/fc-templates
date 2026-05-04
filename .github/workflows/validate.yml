@@ -14,7 +14,7 @@ jobs:
     outputs:
       templates: ${{ steps.find.outputs.templates }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - id: find
         name: Read templates.json
         run: |
@@ -32,10 +32,10 @@ jobs:
         template: ${{ fromJSON(needs.list-templates.outputs.templates) }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup Node 20
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '20'
           cache: 'npm'
@@ -70,7 +70,7 @@ jobs:
     name: Registry integrity
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: templates.json is valid JSON
         run: jq empty templates.json
