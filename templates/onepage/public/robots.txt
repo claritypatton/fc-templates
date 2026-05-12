@@ -1,0 +1,31 @@
+# Site Builder generated site - not for public indexing.
+# Publicly accessible to anyone with the link, but not indexed
+# by search engines or AI training crawlers.
+
+User-agent: *
+Disallow: /
+
+# AI training crawlers (explicit, in addition to wildcard above)
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
